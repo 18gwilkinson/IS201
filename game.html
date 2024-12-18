@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moosehead Hangman</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    .word {
+      font-size: 2rem;
+      letter-spacing: 5px;
+      margin: 20px 0;
+    }
+    .letters {
+      margin: 20px 0;
+    }
+    .letters button {
+      font-size: 1.5rem;
+      margin: 5px;
+      padding: 10px 15px;
+      cursor: pointer;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+    }
+    .letters button.disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    .hangman {
+      margin: 20px 0;
+      font-size: 2rem;
+    }
+    .message {
+      font-size: 1.5rem;
+      margin-top: 20px;
+      color: #333;
+    }
+    .restart {
+      margin-top: 20px;
+    }
+    .restart button {
+      padding: 10px 15px;
+      font-size: 1rem;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Moosehead Hangman</h1>
+  <div class="hangman" id="hangman">
+    Wrong guesses: <span id="wrong-count">0</span>/6
+  </div>
+  <div class="word" id="word">
+    <!-- Hidden word will display here -->
+  </div>
+  <div class="letters" id="letters">
+    <!-- Alphabet buttons will be generated here -->
+  </div>
+  <div class="message" id="message">
+    <!-- Win/Lose messages will appear here -->
+  </div>
+  <div class="restart" id="restart" style="display: none;">
+    <button onclick="startGame()">Play Again</button>
+  </div>
+
+  <script>
+    const words = ["andreas", "capricorn", "bruce", "moosehead", "hadley", "grantula", "nathanofanael", "pitt", "crabman", "kassraelia", "paigelayna", "micanthos", "generalmathai", "harold", "yemen", "katari", "jardineland", "karzak", "redd", "sirswede", "theboy", "janiemarie", "chase", "samruta"]; // Add your custom words here
+    let selectedWord = "";
+    let hiddenWord = [];
+    let wrongGuesses = 0;
+    const maxWrongGuesses = 6;
+
+    const wordEl = document.getElementById("word");
+    const lettersEl = document.getElementById("letters");
+    const hangmanEl = document.getElementById("hangman");
+    const messageEl = document.getElementById("message");
+    const restartEl = document.getElementById("restart");
+
+    function startGame() {
+      selectedWord = words[Math.floor(Math.random() * words.length)];
+      hiddenWord = Array(selectedWord.length).fill("_");
+      wrongGuesses = 0;
+
+      wordEl.textContent = hiddenWord.join(" ");
+      hangmanEl.textContent = `Wrong guesses: 0/${maxWrongGuesses}`;
+      messageEl.textContent = "";
+      restartEl.style.display = "none";
+
+      generateAlphabetButtons();
+    }
+
+    function generateAlphabetButtons() {
+      lettersEl.innerHTML = "";
+      for (let i = 65; i <= 90; i++) {
+        const letter = String.fromCharCode(i).toLowerCase();
+        const button = document.createElement("button");
+        button.textContent = letter;
+        button.onclick = () => handleGuess(letter, button);
+        lettersEl.appendChild(button);
+      }
+    }
+
+    function handleGuess(letter, button) {
+      button.disabled = true;
+      button.classList.add("disabled");
+
+      if (selectedWord.includes(letter)) {
+        for (let i = 0; i < selectedWord.length; i++) {
+          if (selectedWord[i] === letter) {
+            hiddenWord[i] = letter;
+          }
+        }
+        wordEl.textContent = hiddenWord.join(" ");
+        checkWin();
+      } else {
+        wrongGuesses++;
+        hangmanEl.textContent = `Wrong guesses: ${wrongGuesses}/${maxWrongGuesses}`;
+        if (wrongGuesses === maxWrongGuesses) {
+          endGame(false);
+        }
+      }
+    }
+
+    function checkWin() {
+      if (!hiddenWord.includes("_")) {
+        endGame(true);
+      }
+    }
+
+    function endGame(won) {
+      messageEl.textContent = won
+        ? "Congratulations! You guessed the word!"
+        : `Game Over! The word was "${selectedWord}".`;
+      restartEl.style.display = "block";
+      lettersEl.innerHTML = ""; // Remove alphabet buttons
+    }
+
+    // Start the game on page load
+    startGame();
+  </script>
+</body>
+</html>

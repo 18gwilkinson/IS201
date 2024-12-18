@@ -1,0 +1,49 @@
+/* General body styling */
+body {
+    background-color: beige; /* Deep space-themed background */
+    color: black; /* Light text for contrast */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header styling */
+header {
+    text-align: center;
+    padding: 20px;
+    background-color: darkred; /* Darker shade for header */
+    color: mintcream; /* Keep text consistent */
+}
+
+/* Navigation links */
+nav a {
+    color: #a7c7e7; /* Soft blue for links */
+    text-decoration: none;
+    margin: 0 10px;
+}
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* Section styling */
+.content {
+    margin: 20px;
+}
+.list-section {
+    margin: 20px 0;
+}
+.image-section, .video-section, .tableau-section {
+    margin: 20px 0;
+    text-align: center;
+}
+
+/* Footer styling */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #1b263b;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    color: #e0e1dd;
+}
